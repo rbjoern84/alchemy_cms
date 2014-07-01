@@ -92,6 +92,7 @@ module Alchemy
           :alchemy_admin_attachments,
           :alchemy_admin_dashboard,
           :alchemy_admin_layoutpages,
+          :alchemy_admin_nodes,
           :alchemy_admin_pages,
           :alchemy_admin_pictures,
           :alchemy_admin_tags,
@@ -112,6 +113,7 @@ module Alchemy
         can :manage,                    Alchemy::EssenceFile
         can :manage,                    Alchemy::EssencePicture
         can :manage,                    Alchemy::LegacyPageUrl
+        can :manage,                    Alchemy::Node
         can :edit_content,              Alchemy::Page
         can [:read, :thumbnail, :info], Alchemy::Picture
         can [:read, :autocomplete],     Alchemy::Tag
