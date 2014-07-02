@@ -69,7 +69,8 @@ module Alchemy
 
     stampable stamper_class_name: Alchemy.user_class_name
 
-    has_many :tree_nodes, as: 'navigatable', class_name: 'Alchemy::Node'
+    is_alchemy_node
+
     has_many :folded_pages
     has_many :legacy_urls, :class_name => 'Alchemy::LegacyPageUrl'
     belongs_to :language
@@ -196,6 +197,20 @@ module Alchemy
           options << [I18n.t(option, scope: 'link_target_options', default: option.to_s.humanize), option]
         end
         options
+      end
+
+      # All pages from current language for node select
+      def alchemy_navigatables
+        with_language(Language.current.id).order(:name)
+      end
+
+      # Create page from given node
+      def create_from_alchemy_node(node)
+        self.create!(
+          name: node.name,
+          language: node.language,
+          page_layout: 'standard' # TODO: find a way to choose page layout
+        )
       end
 
     private
@@ -351,6 +366,11 @@ module Alchemy
       end
 
       update_columns(hash)
+    end
+
+    # Updates the node after been connected to it
+    def before_save_of_alchemy_node(node)
+      node.url = self.slug
     end
 
     private
