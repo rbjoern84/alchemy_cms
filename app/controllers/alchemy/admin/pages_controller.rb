@@ -160,11 +160,6 @@ module Alchemy
         redirect_back_or_to_default(admin_pages_path)
       end
 
-      def switch_language
-        set_alchemy_language(params[:language_id])
-        do_redirect_to redirect_path_for_switch_language
-      end
-
       def flush
         Language.current.pages.flushables.each do |page|
           page.publish!
@@ -178,14 +173,6 @@ module Alchemy
 
       def load_page
         @page = Page.find(params[:id])
-      end
-
-      def redirect_path_for_switch_language
-        if request.referer && request.referer.include?('admin/layoutpages')
-          admin_layoutpages_path
-        else
-          admin_pages_path
-        end
       end
 
       def redirect_path_after_create_page

@@ -70,7 +70,6 @@ Alchemy::Engine.routes.draw do
       collection do
         post :flush
         post :copy_language_tree
-        get :switch_language
         get :create_language
         get :link
       end
@@ -133,7 +132,11 @@ Alchemy::Engine.routes.draw do
     end
 
     resources :legacy_page_urls
-    resources :languages
+    resources :languages do
+      collection do
+        get :switch
+      end
+    end
 
     resource :clipboard, :only => :index, :controller => 'clipboard' do
       collection do
