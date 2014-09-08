@@ -21,7 +21,6 @@ module Alchemy
     let(:klingonian_public_page)    { FactoryGirl.create(:public_page, :language => klingonian, :parent_id => klingonian_language_root.id) }
 
     before do
-      allow(Config).to receive(:get) { |arg| arg == :url_nesting ? true : Config.parameter(arg) }
       @root_page = language_root # We need this instance variable in the helpers
     end
 
