@@ -107,3 +107,9 @@
   contents:
   - name: text
     type: EssenceRichtext
+
+- name: search
+  unique: true
+  contents:
+  - name: headline
+    type: EssenceText

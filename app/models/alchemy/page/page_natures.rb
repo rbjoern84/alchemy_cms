@@ -7,42 +7,8 @@ module Alchemy
       definition['taggable'] == true
     end
 
-    def rootpage?
-      !self.new_record? && self.parent_id.blank?
-    end
-
-    def systempage?
-      return false
-      # TODO refactor systempages
-      # return true if Page.root.nil?
-      # rootpage? || (self.parent_id == Page.root.id && !self.language_root?)
-    end
-
-    def folded?(user_id)
-      return unless Alchemy.user_class < ActiveRecord::Base
-      folded_pages.where(user_id: user_id, folded: true).any?
-    end
-
     def contains_feed?
       definition["feed"]
-    end
-
-    # Returns true or false if the pages layout_description for config/alchemy/page_layouts.yml contains redirects_to_external: true
-    def redirects_to_external?
-      !!definition["redirects_to_external"]
-    end
-
-    def has_controller?
-      !PageLayout.get(self.page_layout).nil? && !PageLayout.get(self.page_layout)["controller"].blank?
-    end
-
-    def controller_and_action
-      if self.has_controller?
-        {
-          controller: self.layout_description["controller"].gsub(/(^\b)/, "/#{$1}"),
-          action: self.layout_description["action"]
-        }
-      end
     end
 
     # Returns a Hash describing the status of the Page.
@@ -50,7 +16,6 @@ module Alchemy
     def status
       {
         public: public?,
-        visible: visible?,
         locked: locked?,
         restricted: restricted?
       }
@@ -66,7 +31,6 @@ module Alchemy
 
     # Returns the self#page_layout description from config/alchemy/page_layouts.yml file.
     def layout_description
-      return {} if self.systempage?
       description = PageLayout.get(self.page_layout)
       if description.nil?
         log_warning "Page layout description for `#{self.page_layout}` not found. Please check `page_layouts.yml` file."
@@ -80,7 +44,7 @@ module Alchemy
     # Page layout names are defined inside the config/alchemy/page_layouts.yml file.
     # Translate the name in your config/locales language yml file.
     def layout_display_name
-      I18n.t(self.page_layout, :scope => :page_layout_names)
+      I18n.t(self.page_layout, scope: 'page_layout_names')
     end
 
     # Returns the name for the layout partial

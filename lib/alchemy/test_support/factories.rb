@@ -48,22 +48,12 @@ FactoryGirl.define do
   end
 
   factory :page, :class => 'Alchemy::Page' do
-
-    language { Alchemy::Language.default || FactoryGirl.create(:language) }
+    language { Alchemy::Language.default }
     sequence(:name) { |n| "A Page #{n}" }
-    parent_id { (Alchemy::Page.find_by_language_root(true) || FactoryGirl.create(:language_root_page)).id }
     page_layout "standard"
 
     # This speeds up creating of pages dramatically. Pass :do_not_autogenerate => false to generate elements
     do_not_autogenerate true
-
-    factory :language_root_page do
-      name 'Startseite'
-      page_layout { language.page_layout }
-      language_root true
-      public true
-      parent_id { Alchemy::Page.root.id }
-    end
 
     factory :public_page do
       sequence(:name) { |n| "A Public Page #{n}" }
@@ -72,8 +62,6 @@ FactoryGirl.define do
 
     factory :systempage do
       name "Systempage"
-      parent_id { Alchemy::Page.root.id }
-      language_root false
       page_layout nil
       language nil
     end
@@ -82,11 +70,10 @@ FactoryGirl.define do
       name "Restricted page"
       restricted true
     end
-
   end
 
-  factory :cell, :class => 'Alchemy::Cell' do
-    page { Alchemy::Page.find_by(language_root: true) || FactoryGirl.create(:language_root_page) }
+  factory :cell, class: 'Alchemy::Cell' do
+    page
     name "a_cell"
   end
 

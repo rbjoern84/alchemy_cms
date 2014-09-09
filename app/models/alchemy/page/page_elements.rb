@@ -10,7 +10,7 @@ module Alchemy
       has_many :contents, :through => :elements
       has_and_belongs_to_many :to_be_sweeped_elements, -> { uniq }, class_name: 'Alchemy::Element', join_table: 'alchemy_elements_alchemy_pages'
 
-      after_create :autogenerate_elements, :unless => proc { systempage? || do_not_autogenerate }
+      after_create :autogenerate_elements, unless: -> { do_not_autogenerate }
       after_update :trash_not_allowed_elements, :if => :page_layout_changed?
       after_update :autogenerate_elements, :if => :page_layout_changed?
       after_destroy { elements.each { |el| el.destroy unless el.trashed? } }
