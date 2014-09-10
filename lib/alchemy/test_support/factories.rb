@@ -23,7 +23,7 @@ FactoryGirl.define do
     end
   end
 
-  factory :language, :class => 'Alchemy::Language' do
+  factory :language, class: 'Alchemy::Language' do
     name 'Deutsch'
     code 'de'
     default true
@@ -47,12 +47,12 @@ FactoryGirl.define do
     end
   end
 
-  factory :page, :class => 'Alchemy::Page' do
+  factory :page, class: 'Alchemy::Page' do
     language { Alchemy::Language.default }
     sequence(:name) { |n| "A Page #{n}" }
     page_layout "standard"
 
-    # This speeds up creating of pages dramatically. Pass :do_not_autogenerate => false to generate elements
+    # This speeds up creating of pages dramatically. Pass do_not_autogenerate: false to generate elements
     do_not_autogenerate true
 
     factory :public_page do
@@ -77,7 +77,7 @@ FactoryGirl.define do
     name "a_cell"
   end
 
-  factory :element, :class => 'Alchemy::Element' do
+  factory :element, class: 'Alchemy::Element' do
     name 'article'
     create_contents_after_create false
 
@@ -87,32 +87,32 @@ FactoryGirl.define do
     end
   end
 
-  factory :picture, :class => 'Alchemy::Picture' do
+  factory :picture, class: 'Alchemy::Picture' do
     image_file File.new(File.expand_path('../../../../spec/fixtures/image.png', __FILE__))
     name 'image'
     image_file_name 'image.png'
     upload_hash Time.now.hash
   end
 
-  factory :content, :class => 'Alchemy::Content' do
+  factory :content, class: 'Alchemy::Content' do
     name "text"
     essence_type "Alchemy::EssenceText"
-    association :essence, :factory => :essence_text
+    association :essence, factory: :essence_text
   end
 
-  factory :essence_text, :class => 'Alchemy::EssenceText' do
+  factory :essence_text, class: 'Alchemy::EssenceText' do
     body ''
   end
 
-  factory :essence_picture, :class => 'Alchemy::EssencePicture' do
+  factory :essence_picture, class: 'Alchemy::EssencePicture' do
     picture
   end
 
-  factory :essence_file, :class => 'Alchemy::EssenceFile' do
+  factory :essence_file, class: 'Alchemy::EssenceFile' do
     attachment
   end
 
-  factory :attachment, :class => 'Alchemy::Attachment' do
+  factory :attachment, class: 'Alchemy::Attachment' do
     file File.new(File.expand_path('../../../../spec/fixtures/image.png', __FILE__))
     name 'image'
     file_name 'image.png'
@@ -133,5 +133,10 @@ FactoryGirl.define do
   factory :site, class: 'Alchemy::Site' do
     name 'A Site'
     host 'domain.com'
+  end
+
+  factory :node, class: 'Alchemy::Node' do
+    name 'A Node'
+    language { Alchemy::Language.default }
   end
 end
