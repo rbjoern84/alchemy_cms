@@ -58,4 +58,20 @@ describe Alchemy::Admin::LanguagesController do
       end
     end
   end
+
+  describe '#switch' do
+    let!(:language) { Alchemy::Language.default }
+
+    before { request.stub(referer: '/admin/pages') }
+
+    it "sets the new language id in sessions" do
+      get :switch, language_id: language.id
+      expect(session[:alchemy_language_id]).to eq(language.id)
+    end
+
+    it "redirects to referer" do
+      get :switch, language_id: language.id
+      expect(response).to redirect_to('/admin/pages')
+    end
+  end
 end
