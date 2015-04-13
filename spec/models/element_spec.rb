@@ -348,34 +348,31 @@ module Alchemy
     end
 
     context 'previous and next elements.' do
-      let(:page) { FactoryGirl.create(:language_root_page) }
-
-      before(:each) do
-        @element1 = FactoryGirl.create(:element, :page => page, :name => 'headline')
-        @element2 = FactoryGirl.create(:element, :page => page)
-        @element3 = FactoryGirl.create(:element, :page => page, :name => 'text')
-      end
+      let!(:page)     { create(:page) }
+      let!(:element1) { create(:element, page: page, name: 'headline') }
+      let!(:element2) { create(:element, page: page) }
+      let!(:element3) { create(:element, page: page, name: 'text') }
 
       describe '#prev' do
         it "should return previous element on same page" do
-          expect(@element3.prev).to eq(@element2)
+          expect(element3.prev).to eq(element2)
         end
 
         context "with name as parameter" do
           it "should return previous of this kind" do
-            expect(@element3.prev('headline')).to eq(@element1)
+            expect(element3.prev('headline')).to eq(element1)
           end
         end
       end
 
       describe '#next' do
         it "should return next element on same page" do
-          expect(@element2.next).to eq(@element3)
+          expect(element2.next).to eq(element3)
         end
 
         context "with name as parameter" do
           it "should return next of this kind" do
-            expect(@element1.next('text')).to eq(@element3)
+            expect(element1.next('text')).to eq(element3)
           end
         end
       end
