@@ -2,10 +2,7 @@ require 'spec_helper'
 
 module Alchemy
   describe Admin::LayoutpagesController do
-
-    before(:each) do
-      sign_in(admin_user)
-    end
+    before { sign_in(admin_user) }
 
     describe "#index" do
       it "should assign @locked_pages" do
@@ -13,9 +10,9 @@ module Alchemy
         expect(assigns(:locked_pages)).to eq([])
       end
 
-      it "should assign @layout_root" do
+      it "should assign @locked_pages" do
         alchemy_get :index
-        expect(assigns(:layout_root)).to be_a(Page)
+        expect(assigns(:layoutpages)).to eq(Page.layoutpages)
       end
 
       it "should assign @languages" do
